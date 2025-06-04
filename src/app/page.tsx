@@ -1,12 +1,14 @@
 // /app/page.tsx
 'use client'  // enables client-side rendering
 
+import { GenerateResponse } from "@/types/api";
 import { useState } from "react"
 
 export default function Home() {
   // TODO: add Zustand store
   const [sentence, setSentence] = useState('');
   const [response, setResponse] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -14,6 +16,7 @@ export default function Home() {
 
     setLoading(true);
     setResponse('');
+    setError('');
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
@@ -21,13 +24,20 @@ export default function Home() {
         body: JSON.stringify({ sentence }),
       });
 
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data: GenerateResponse = await res.json();
 
-      const data = await res.json();
-      setResponse(data.message);
-    } catch (err) {
-      console.error('Error submitting sentence:', err);
-      setResponse('Something went wrong. Please try again.');
+      if (!res.ok) {
+        if ('error' in data) setError(data.error);
+        else setError(`Server error: ${res.status}`);
+        return
+      }
+
+      if ('message' in data) setResponse(data.message);
+      else setError('Unexpected response structure');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
+      console.error('Error submitting sentence:', err)
+      setError(message)
     } finally {
       setLoading(false);
     }
@@ -51,7 +61,8 @@ export default function Home() {
           Submit
         </button>
       </form>
-      {response && <p className="mt-4">Response: {response}</p>}
+      {response && (<p className="mt-4">Response: {response}</p>)}
+      {error && (<p className="mt-4 text-red-600 font-medium">{error}</p>)}
     </main>
   )
 }
