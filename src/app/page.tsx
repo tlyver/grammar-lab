@@ -1,45 +1,45 @@
 // /app/page.tsx
 'use client'  // enables client-side rendering
 
-import { GenerateResponse } from "@/types/api";
+import { GenerateResponse } from "@/types/api"
 import { useState } from "react"
 
 export default function Home() {
   // TODO: add Zustand store
-  const [sentence, setSentence] = useState('');
-  const [response, setResponse] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [sentence, setSentence] = useState('')
+  const [response, setResponse] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    setLoading(true);
-    setResponse('');
-    setError('');
+    setLoading(true)
+    setResponse('')
+    setError('')
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sentence }),
+        body: JSON.stringify({ sentence })
       });
 
-      const data: GenerateResponse = await res.json();
+      const data: GenerateResponse = await res.json()
 
       if (!res.ok) {
-        if ('error' in data) setError(data.error);
-        else setError(`Server error: ${res.status}`);
+        if ('error' in data) setError(data.error)
+        else setError(`Server error: ${res.status}`)
         return
       }
 
-      if ('message' in data) setResponse(data.message);
-      else setError('Unexpected response structure');
+      if ('message' in data) setResponse(data.message)
+      else setError('Unexpected response structure')
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
       console.error('Error submitting sentence:', err)
       setError(message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
