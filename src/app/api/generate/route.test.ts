@@ -2,8 +2,9 @@
 
 import { describe, expect, test } from 'vitest'
 import { POST } from './route'
+import { GenerateRequest } from '@/app/types/api'
 
-function createMockRequest(body: any): Request {
+function createMockRequest(body: GenerateRequest): Request {
   return new Request('http://localhost/api/generate', {
     method: 'POST',
     body: JSON.stringify(body),
@@ -33,7 +34,7 @@ describe('POST /api/generate', () => {
   })
 
   test('returns 400 for non-string input', async () => {
-    const req = createMockRequest({ sentence: 12345 })
+    const req = createMockRequest({ sentence: 12345 as unknown as string })
     const res = await POST(req)
     const json = await res.json()
 

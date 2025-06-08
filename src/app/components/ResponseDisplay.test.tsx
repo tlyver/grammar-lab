@@ -2,8 +2,8 @@
 
 import React from 'react'
 
-import { render, screen, fireEvent } from '@testing-library/react'
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { describe, expect, test } from 'vitest'
 import '@testing-library/jest-dom'
 import { useSentenceStore } from '@/app/stores/useSentenceStore'
 import ResponseDisplay from './ResponseDisplay'

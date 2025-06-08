@@ -2,16 +2,18 @@
 
 import { describe, expect, test, vi } from 'vitest'
 import { generateSentence } from './client'
+import { GenerateResponse } from '@/app/types/api'
 
 global.fetch = vi.fn()
 
 describe('generate/client', () => {
   test('returns message on success', async () => {
     const sentence = 'The quick brown fox jumps over the lazy dog.'
+    const mockResponse: GenerateResponse = { message: sentence, submitted: sentence }
 
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ message: sentence, submitted: sentence }),
+      json: async () => mockResponse,
     } as Response)
 
     const data = await generateSentence(sentence)
@@ -20,22 +22,22 @@ describe('generate/client', () => {
 
   test('returns error message when contains error message', async () => {
     const error = 'There was an error'
+    const mockResponse: GenerateResponse = { error }
 
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: false,
-      json: async () => ({ error }),
+      json: async () => mockResponse,
     } as Response)
 
     await expect(generateSentence('')).rejects.toThrow(error)
   })
 
   test('returns error message when response does not contain error message', async () => {
-    const error = 'There was an error'
-
+    const mockResponse = {} as unknown as GenerateResponse
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: false,
       status: 500,
-      json: async () => ({}),
+      json: async () => mockResponse,
     } as Response)
 
     await expect(generateSentence('')).rejects.toThrow('Server error: 500')
