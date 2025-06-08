@@ -1,6 +1,6 @@
-// src/app/api/generate/generateSentence.ts
+// src/app/api/generate/client.ts
 
-import { GenerateResponse } from '@/types/api'
+import { GenerateResponse } from '@/app/types/api'
 
 export async function generateSentence(sentence: string): Promise<GenerateResponse> {
   const res = await fetch('/api/generate', {
@@ -12,14 +12,14 @@ export async function generateSentence(sentence: string): Promise<GenerateRespon
   const data: GenerateResponse = await res.json()
 
   if (!res.ok) {
-    let errMsg;
+    let errMsg
     if ('error' in data) {
       errMsg = data?.error
     } else {
       errMsg = `Server error: ${res.status}`
     }
-    throw new Error(errMsg);
+    throw new Error(errMsg)
   }
 
-  return data;
+  return data
 }

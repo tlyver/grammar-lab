@@ -1,7 +1,7 @@
 // src/app/components/ResponseDisplay.tsx
 'use client'
 
-import { useSentenceStore } from '@/stores/useSentenceStore'
+import { useSentenceStore } from '@/app/stores/useSentenceStore'
 
 export default function ResponseDisplay() {
   const { response, error } = useSentenceStore()

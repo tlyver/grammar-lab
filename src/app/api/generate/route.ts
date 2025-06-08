@@ -1,14 +1,14 @@
-// /app/api/generate/route.ts
+// src/app/api/generate/route.ts
 
-import { GenerateRequest, GenerateResponse } from '@/types/api'
-import { sanitizeSentence } from '@/utils/sanitize'
+import { GenerateRequest, GenerateResponse } from '@/app/types/api'
+import { sanitizeSentence } from '@/app/utils/sanitize'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
   try {
     const body: GenerateRequest = await req.json()
-    const { sentence } = body;
-    
+    const { sentence } = body
+
     const cleaned = sanitizeSentence(sentence)
 
     if (!cleaned) {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json<GenerateResponse>({
       message: cleaned,
-      submitted: sentence
+      submitted: sentence,
     })
   } catch (err) {
     console.error('API error in /generate:', err)

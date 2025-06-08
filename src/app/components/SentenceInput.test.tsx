@@ -1,10 +1,10 @@
-// src/app/components/tests/ResponseDisplay.test.tsx
+// src/app/components/ResponseDisplay.test.tsx
 
 import { render, screen, fireEvent } from '@testing-library/react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
-import { useSentenceStore } from '@/stores/useSentenceStore'
-import SentenceInput from '../SentenceInput'
+import { useSentenceStore } from '@/app/stores/useSentenceStore'
+import SentenceInput from './SentenceInput'
 
 // Reset store before each test
 beforeEach(() => {

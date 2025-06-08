@@ -1,4 +1,4 @@
-// src/types/api.ts
+// src/app/types/api.ts
 
 export type GenerateRequest = { sentence: string }
 
