@@ -45,7 +45,7 @@ describe('sanitizeSentence', () => {
   })
 
   it('returns null for non-string input', () => {
-    expect(sanitizeSentence(123 as any)).toBeNull()
+    expect(sanitizeSentence(123 as number)).toBeNull()
     expect(sanitizeSentence(undefined)).toBeNull()
     expect(sanitizeSentence(null)).toBeNull()
   })

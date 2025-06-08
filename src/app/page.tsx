@@ -3,6 +3,7 @@
 
 import { useSentenceStore } from "@/stores/useSentenceStore"
 import { GenerateResponse } from "@/types/api"
+import { generateSentence } from "./api/generate/generateSentence"
 
 export default function Home() {
   const {
@@ -23,22 +24,12 @@ export default function Home() {
     setResponse('')
     setError('')
     try {
-      const res = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sentence })
-      });
-
-      const data: GenerateResponse = await res.json()
-
-      if (!res.ok) {
-        if ('error' in data) setError(data.error)
-        else setError(`Server error: ${res.status}`)
-        return
+      const data: GenerateResponse = await generateSentence(sentence); 
+      if ('message' in data) {
+        setResponse(data.message)
+      } else {
+        setError(data.error)
       }
-
-      if ('message' in data) setResponse(data.message)
-      else setError('Unexpected response structure')
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
       console.error('Error submitting sentence:', err)
