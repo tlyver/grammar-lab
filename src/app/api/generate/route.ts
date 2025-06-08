@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       )
     }
 
-    return NextResponse.json<GenerateResponse>({ message: `You submitted: "${cleaned}"` })
+    return NextResponse.json<GenerateResponse>({ message: cleaned })
   } catch (err) {
     console.error('API error in /generate:', err)
     return NextResponse.json<GenerateResponse>({ error: 'Internal server error' }, { status: 500 })

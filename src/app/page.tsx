@@ -1,15 +1,20 @@
 // /app/page.tsx
 'use client'  // enables client-side rendering
 
+import { useSentenceStore } from "@/stores/useSentenceStore"
 import { GenerateResponse } from "@/types/api"
-import { useState } from "react"
 
 export default function Home() {
-  // TODO: add Zustand store
-  const [sentence, setSentence] = useState('')
-  const [response, setResponse] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const {
+    sentence,
+    setSentence,
+    response,
+    setResponse,
+    error,
+    setError,
+    loading,
+    setLoading
+  } = useSentenceStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
