@@ -13,6 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* TODO: create a page header */}
       <body className="text-center">{children}</body>
     </html>
   )
