@@ -1,4 +1,4 @@
-// /app/page.tsx
+// src/app/page.tsx
 
 import ResponseDisplay from "./components/ResponseDisplay"
 import SentenceInput from "./components/SentenceInput"

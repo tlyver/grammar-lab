@@ -1,3 +1,5 @@
+// src/app/components/tests/ResponseDisplay.test.tsx
+
 import { render, screen, fireEvent } from '@testing-library/react'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
