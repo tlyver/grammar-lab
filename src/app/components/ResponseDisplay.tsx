@@ -1,6 +1,7 @@
 // src/app/components/ResponseDisplay.tsx
 'use client'
 
+import React from 'react'
 import { useSentenceStore } from '@/app/stores/useSentenceStore'
 
 export default function ResponseDisplay() {
