@@ -1,4 +1,4 @@
-// src/app/stores/useSentenceStore.ts
+// src/stores/useSentenceStore.ts
 
 import { create, StateCreator } from 'zustand'
 import { devtools } from 'zustand/middleware'

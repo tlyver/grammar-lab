@@ -1,4 +1,4 @@
-// src/app/utils/sanitize.ts
+// src/utils/sanitize.ts
 
 export function sanitizeSentence(input: unknown): string | null {
   if (typeof input !== 'string') return null

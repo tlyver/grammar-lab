@@ -1,4 +1,4 @@
-// src/app/utils/sanitize.test.ts
+// src/utils/sanitize.test.ts
 
 import { describe, it, expect } from 'vitest'
 import { sanitizeSentence } from './sanitize'

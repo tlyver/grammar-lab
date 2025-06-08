@@ -2,7 +2,7 @@
 
 import { describe, expect, test } from 'vitest'
 import { POST } from './route'
-import { GenerateRequest } from '@/app/types/api'
+import { GenerateRequest } from '@/types/api'
 
 function createMockRequest(body: GenerateRequest): Request {
   return new Request('http://localhost/api/generate', {

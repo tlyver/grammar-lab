@@ -1,7 +1,7 @@
 // src/app/api/generate/route.ts
 
-import { GenerateRequest, GenerateResponse } from '@/app/types/api'
-import { sanitizeSentence } from '@/app/utils/sanitize'
+import { GenerateRequest, GenerateResponse } from '@/types/api'
+import { sanitizeSentence } from '@/utils/sanitize'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {

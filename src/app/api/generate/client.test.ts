@@ -2,7 +2,7 @@
 
 import { describe, expect, test, vi } from 'vitest'
 import { generateSentence } from './client'
-import { GenerateResponse } from '@/app/types/api'
+import { GenerateResponse } from '@/types/api'
 
 global.fetch = vi.fn()
 

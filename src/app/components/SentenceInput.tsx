@@ -3,9 +3,9 @@
 
 import React from 'react'
 
-import { useSentenceStore } from '@/app/stores/useSentenceStore'
+import { useSentenceStore } from '@/stores/useSentenceStore'
 import { generateSentence } from '../api/generate/client'
-import { GenerateResponse } from '@/app/types/api'
+import { GenerateResponse } from '@/types/api'
 
 export default function SentenceInput() {
   const { sentence, setSentence, setResponse, setError, loading, setLoading } = useSentenceStore()

@@ -1,4 +1,4 @@
-// src/app/stores/useSentenceStore.test.ts
+// src/stores/useSentenceStore.test.ts
 
 import { describe, expect, test, beforeEach } from 'vitest'
 import { useSentenceStore } from './useSentenceStore'
