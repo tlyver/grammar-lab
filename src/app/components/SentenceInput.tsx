@@ -1,6 +1,8 @@
 // src/app/components/SentenceInput.tsx
 'use client'
 
+import React from 'react'
+
 import { useSentenceStore } from '@/app/stores/useSentenceStore'
 import { generateSentence } from '../api/generate/client'
 import { GenerateResponse } from '@/app/types/api'
