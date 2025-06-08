@@ -1,5 +1,6 @@
-export type GenerateRequest = {
-  sentence: string
-}
+export type GenerateRequest = { sentence: string }
 
-export type GenerateResponse = { message: string } | { error: string }
+export type GenerateResponse = {
+  message: string,
+  submitted: string
+} | { error: string }
