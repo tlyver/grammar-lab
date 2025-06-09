@@ -1,7 +1,7 @@
 // src/app/page.tsx
 
-import ResponseDisplay from "./components/ResponseDisplay"
-import SentenceInput from "./components/SentenceInput"
+import ResponseDisplay from '@/components/ResponseDisplay'
+import SentenceInput from '@/components/SentenceInput'
 
 export default function Home() {
   return (

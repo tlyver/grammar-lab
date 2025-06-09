@@ -1,4 +1,4 @@
-// src/app/components/ResponseDisplay.tsx
+// src/components/ResponseDisplay.tsx
 'use client'
 
 import React from 'react'

@@ -1,11 +1,11 @@
-// src/app/components/SentenceInput.tsx
+// src/components/SentenceInput.tsx
 'use client'
 
 import React from 'react'
 
 import { useSentenceStore } from '@/stores/useSentenceStore'
-import { generateSentence } from '../api/generate/client'
 import { GenerateResponse } from '@/types/api'
+import { generateSentence } from '@/app/api/generate/client'
 
 export default function SentenceInput() {
   const { sentence, setSentence, setResponse, setError, loading, setLoading } = useSentenceStore()

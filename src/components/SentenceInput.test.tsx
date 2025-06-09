@@ -1,4 +1,4 @@
-// src/app/components/SentenceInput.test.tsx
+// src/components/SentenceInput.test.tsx
 
 import React from 'react'
 
