@@ -3,6 +3,9 @@
 import spacy
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from schemas.request import ParseRequest
+from schemas.response import Token
+from schemas.response import ParseResponse
 
 app = FastAPI()
 
@@ -22,22 +25,21 @@ nlp = spacy.load("en_core_web_sm")
 def root():
   return {"message": "NLP service is running."}
 
-@app.post("/parse")
-async def parse_text(req: Request):
-  data = await req.json()
-  text = data.get("text")
+@app.post("/parse", response_model=ParseResponse)
+async def parse_text(data: ParseRequest):
+  text: str = data.text
   if not text or not isinstance(text, str):
     return {"error": "Invalid or missing text"}
 
   doc = nlp(text)
 
   tokens = [
-    {
-      "text": token.text,
-      "pos": token.pos_,
-      "dep": token.dep_,
-      "head": token.head.text,
-    }
+    Token(
+      text=token.text,
+      pos=token.pos_,
+      dep=token.dep_,
+      head=token.head.text
+    )
     for token in doc
   ]
 
