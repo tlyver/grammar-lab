@@ -2,11 +2,11 @@
 
 import { GenerateResponse } from '@/types/api'
 
-export async function generateSentence(sentence: string): Promise<GenerateResponse> {
+export async function generateText(text: string): Promise<GenerateResponse> {
   const res = await fetch('/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sentence }),
+    body: JSON.stringify({ text }),
   })
 
   const data: GenerateResponse = await res.json()

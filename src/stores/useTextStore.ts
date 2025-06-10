@@ -1,44 +1,44 @@
-// src/stores/useSentenceStore.ts
+// src/stores/useTextStore.ts
 
 import { create, StateCreator } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 type State = {
-  sentence: string
+  text: string
   response: string
   error: string
   loading: boolean
 }
 
 type Actions = {
-  setSentence: (sentence: string) => void
+  setText: (text: string) => void
   setResponse: (response: string) => void
   setError: (error: string) => void
   setLoading: (loading: boolean) => void
 }
 
-type SentenceStore = State & Actions
+type TextStore = State & Actions
 
-const createSentenceSlice: StateCreator<SentenceStore> = (set) => ({
+const createTextSlice: StateCreator<TextStore> = (set) => ({
   // Set default state
-  sentence: '',
+  text: '',
   response: '',
   error: '',
   loading: false,
 
   // Actions
-  setSentence: (sentence: string) => set(() => ({ sentence })),
+  setText: (text: string) => set(() => ({ text })),
   setResponse: (response: string) => set(() => ({ response })),
   setError: (error: string) => set(() => ({ error })),
   setLoading: (loading: boolean) => set(() => ({ loading })),
 })
 
-export const useSentenceStore = create<SentenceStore>()(
+export const useTextStore = create<TextStore>()(
   devtools(
     immer((...args) => ({
-      ...createSentenceSlice(...args),
+      ...createTextSlice(...args),
     })),
-    { name: 'Sentence Store' }
+    { name: 'Text Store' }
   )
 )

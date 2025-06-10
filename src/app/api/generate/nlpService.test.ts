@@ -1,8 +1,8 @@
-// src/app/api/generate/client.test.ts
+// src/app/api/generate/nlpService.test.ts
 
 import { describe, expect, test, vi } from 'vitest'
-import { generateText } from './client'
 import { GenerateResponse } from '@/types/api'
+import { callNLPService } from './nlpService'
 
 global.fetch = vi.fn()
 
@@ -79,37 +79,30 @@ describe('generate/client', () => {
       json: async () => mockResponse,
     } as Response)
 
-    const data = await generateText(text)
-    if ('text' in data) expect(data.text).toEqual(text)
+    const data = await callNLPService(text)
+    if ('tokens' in data) {
+      expect(data.text).toEqual(text)
+      expect(data.tokens).toEqual(tokens)
+    }
   })
 
-  test('returns error message when contains error message', async () => {
+  test('returns error message when response is not ok', async () => {
     const error = 'There was an error'
-    const mockResponse: GenerateResponse = { error }
-
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: false,
-      json: async () => mockResponse,
-    } as Response)
-
-    await expect(generateText('')).rejects.toThrow(error)
-  })
-
-  test('returns error message when response does not contain error message', async () => {
     const mockResponse = {} as unknown as GenerateResponse
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: false,
       status: 500,
+      text: async () => error,
       json: async () => mockResponse,
     } as Response)
 
-    await expect(generateText('')).rejects.toThrow('Server error: 500')
+    await expect(callNLPService('')).rejects.toThrow(`NLP server error: ${error}`)
   })
 
   test('throws network error', async () => {
     const networkError = 'Failed to fetch'
     vi.mocked(fetch).mockRejectedValueOnce(new Error(networkError))
 
-    await expect(generateText('')).rejects.toThrow(networkError)
+    await expect(callNLPService('')).rejects.toThrow(networkError)
   })
 })
