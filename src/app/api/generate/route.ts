@@ -1,27 +1,24 @@
 // src/app/api/generate/route.ts
 
 import { GenerateRequest, GenerateResponse } from '@/types/api'
-import { sanitizeSentence } from '@/utils/sanitize'
+import { sanitizeText } from '@/utils/sanitize'
 import { NextResponse } from 'next/server'
+import { callNLPService } from './nlpService'
 
 export async function POST(req: Request) {
   try {
     const body: GenerateRequest = await req.json()
-    const { sentence } = body
-
-    const cleaned = sanitizeSentence(sentence)
+    const cleaned = sanitizeText(body.text)
 
     if (!cleaned) {
       return NextResponse.json<GenerateResponse>(
-        { error: 'Invalid or missing sentence' },
+        { error: 'Invalid or missing text' },
         { status: 400 }
       )
     }
 
-    return NextResponse.json<GenerateResponse>({
-      message: cleaned,
-      submitted: sentence,
-    })
+    const nlp = await callNLPService(cleaned)
+    return NextResponse.json<GenerateResponse>(nlp)
   } catch (err) {
     console.error('API error in /generate:', err)
     return NextResponse.json<GenerateResponse>({ error: 'Internal server error' }, { status: 500 })

@@ -1,52 +1,52 @@
 // src/utils/sanitize.test.ts
 
 import { describe, it, expect } from 'vitest'
-import { sanitizeSentence } from './sanitize'
+import { sanitizeText } from './sanitize'
 
 describe('sanitizeSentence', () => {
   it('removes control characters like \\u0007 and \\x00', () => {
     const input = 'Hello\u0007\u0000world'
-    const result = sanitizeSentence(input)
+    const result = sanitizeText(input)
     expect(result).toBe('Helloworld')
   })
 
   it('accepts valid, safe sentences', () => {
-    expect(sanitizeSentence('The quick brown fox jumps over the lazy dog.')).toBe(
+    expect(sanitizeText('The quick brown fox jumps over the lazy dog.')).toBe(
       'The quick brown fox jumps over the lazy dog.'
     )
   })
 
   it('returns cleaned result when input is messy but safe', () => {
     const input = '  \u0000Hello world!\n'
-    const result = sanitizeSentence(input)
+    const result = sanitizeText(input)
     expect(result).toBe('Hello world!')
   })
 
   it('rejects empty or whitespace-only input', () => {
-    expect(sanitizeSentence('   ')).toBeNull()
-    expect(sanitizeSentence('\n\t')).toBeNull()
-    expect(sanitizeSentence('')).toBeNull()
+    expect(sanitizeText('   ')).toBeNull()
+    expect(sanitizeText('\n\t')).toBeNull()
+    expect(sanitizeText('')).toBeNull()
   })
 
   it('rejects strings that exceed length limit', () => {
     const longInput = 'a'.repeat(301)
-    expect(sanitizeSentence(longInput)).toBeNull()
+    expect(sanitizeText(longInput)).toBeNull()
   })
 
   it('rejects dangerous HTML/script patterns', () => {
-    expect(sanitizeSentence('<script>alert(1)</script>')).toBeNull()
-    expect(sanitizeSentence('<img src=x onerror=alert(1)>')).toBeNull()
-    expect(sanitizeSentence('eval(alert("x"))')).toBeNull()
+    expect(sanitizeText('<script>alert(1)</script>')).toBeNull()
+    expect(sanitizeText('<img src=x onerror=alert(1)>')).toBeNull()
+    expect(sanitizeText('eval(alert("x"))')).toBeNull()
   })
 
   it('rejects prompt injection-like patterns', () => {
-    expect(sanitizeSentence('${malicious}')).toBeNull()
-    expect(sanitizeSentence('{{ override }}')).toBeNull()
+    expect(sanitizeText('${malicious}')).toBeNull()
+    expect(sanitizeText('{{ override }}')).toBeNull()
   })
 
   it('returns null for non-string input', () => {
-    expect(sanitizeSentence(123 as number)).toBeNull()
-    expect(sanitizeSentence(undefined)).toBeNull()
-    expect(sanitizeSentence(null)).toBeNull()
+    expect(sanitizeText(123 as number)).toBeNull()
+    expect(sanitizeText(undefined)).toBeNull()
+    expect(sanitizeText(null)).toBeNull()
   })
 })

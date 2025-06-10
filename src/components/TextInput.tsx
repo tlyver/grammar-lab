@@ -3,12 +3,12 @@
 
 import React from 'react'
 
-import { useSentenceStore } from '@/stores/useSentenceStore'
+import { useTextStore } from '@/stores/useTextStore'
 import { GenerateResponse } from '@/types/api'
-import { generateSentence } from '@/app/api/generate/client'
+import { generateText } from '@/app/api/generate/client'
 
-export default function SentenceInput() {
-  const { sentence, setSentence, setResponse, setError, loading, setLoading } = useSentenceStore()
+export default function TextInput() {
+  const { text, setText: setText, setResponse, setError, loading, setLoading } = useTextStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -18,15 +18,15 @@ export default function SentenceInput() {
     setError('')
 
     try {
-      const data: GenerateResponse = await generateSentence(sentence)
-      if ('message' in data) {
-        setResponse(data.message)
+      const data: GenerateResponse = await generateText(text)
+      if ('text' in data) {
+        setResponse(data.text)
       } else {
         setError(data.error)
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
-      console.error('Error submitting sentence:', err)
+      console.error('Error submitting text:', err)
       setError(message)
     } finally {
       setLoading(false)
@@ -38,8 +38,8 @@ export default function SentenceInput() {
       <div className="flex">
         <input
           className="flex-1 border p-2 mr-2"
-          value={sentence}
-          onChange={(e) => setSentence(e.target.value)}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
           placeholder="Enter a sentence"
         />
         <button className="bg-blue-500 text-white p-2 rounded" type="submit" disabled={loading}>

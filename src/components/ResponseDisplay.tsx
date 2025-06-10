@@ -2,10 +2,10 @@
 'use client'
 
 import React from 'react'
-import { useSentenceStore } from '@/stores/useSentenceStore'
+import { useTextStore } from '@/stores/useTextStore'
 
 export default function ResponseDisplay() {
-  const { response, error } = useSentenceStore()
+  const { response, error } = useTextStore()
 
   return (
     <>

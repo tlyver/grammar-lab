@@ -1,8 +1,8 @@
 // src/app/api/generate/route.test.ts
 
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { POST } from './route'
-import { GenerateRequest } from '@/types/api'
+import { GenerateRequest, GenerateResponse } from '@/types/api'
 
 function createMockRequest(body: GenerateRequest): Request {
   return new Request('http://localhost/api/generate', {
@@ -12,34 +12,106 @@ function createMockRequest(body: GenerateRequest): Request {
   })
 }
 
+global.fetch = vi.fn()
+
 describe('POST /api/generate', () => {
-  test('returns message for valid sentence', async () => {
-    const sentence = 'The quick brown fox jumps over the lazy dog.'
-    const req = createMockRequest({ sentence })
+  test('returns text and tokens for valid request', async () => {
+    const text = 'The quick brown fox jumps over the lazy dog.'
+    const tokens = [
+      {
+        text: 'The',
+        pos: 'DET',
+        dep: 'det',
+        head: 'fox',
+      },
+      {
+        text: 'quick',
+        pos: 'ADJ',
+        dep: 'amod',
+        head: 'fox',
+      },
+      {
+        text: 'brown',
+        pos: 'ADJ',
+        dep: 'amod',
+        head: 'fox',
+      },
+      {
+        text: 'fox',
+        pos: 'NOUN',
+        dep: 'nsubj',
+        head: 'jumps',
+      },
+      {
+        text: 'jumps',
+        pos: 'VERB',
+        dep: 'ROOT',
+        head: 'jumps',
+      },
+      {
+        text: 'over',
+        pos: 'ADP',
+        dep: 'prep',
+        head: 'jumps',
+      },
+      {
+        text: 'the',
+        pos: 'DET',
+        dep: 'det',
+        head: 'dog',
+      },
+      {
+        text: 'lazy',
+        pos: 'ADJ',
+        dep: 'amod',
+        head: 'dog',
+      },
+      {
+        text: 'dog',
+        pos: 'NOUN',
+        dep: 'pobj',
+        head: 'over',
+      },
+      {
+        text: '.',
+        pos: 'PUNCT',
+        dep: 'punct',
+        head: 'jumps',
+      },
+    ]
+    const mockNlpResponse: GenerateResponse = { text, tokens }
+
+    const mockedFetch = vi.mocked(fetch, true)
+    mockedFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockNlpResponse,
+    } as Response)
+
+    const req = createMockRequest({ text })
     const res = await POST(req)
     const json = await res.json()
 
     expect(res.status).toBe(200)
-    expect(json.message).toBe(sentence)
-    expect(json.submitted).toBe(sentence)
+    expect(json.text).toBe(text)
+    expect(json.tokens).toEqual(tokens)
   })
 
-  test('returns 400 for missing sentence', async () => {
-    const req = createMockRequest({ sentence: '' })
+  test('returns 400 for missing text', async () => {
+    const req = createMockRequest({ text: '' })
     const res = await POST(req)
     const json = await res.json()
 
     expect(res.status).toBe(400)
-    expect(json.error).toBe('Invalid or missing sentence')
+    expect(json.error).toBe('Invalid or missing text')
   })
 
   test('returns 400 for non-string input', async () => {
-    const req = createMockRequest({ sentence: 12345 as unknown as string })
+    const req = createMockRequest({ text: 12345 as unknown as string })
     const res = await POST(req)
     const json = await res.json()
 
     expect(res.status).toBe(400)
-    expect(json.error).toBe('Invalid or missing sentence')
+    expect(json.error).toBe('Invalid or missing text')
   })
 
   test('returns 500 on unexpected server error', async () => {
