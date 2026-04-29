@@ -4,8 +4,7 @@
 import React from 'react'
 
 import { useTextStore } from '@/stores/useTextStore'
-import { GenerateResponse } from '@/types/api'
-import { generateText } from '@/app/api/generate/client'
+import { generateText } from '@/lib/generate/client'
 
 export default function TextInput() {
   const { text, setText: setText, setResponse, setError, loading, setLoading } = useTextStore()
@@ -18,12 +17,8 @@ export default function TextInput() {
     setError('')
 
     try {
-      const data: GenerateResponse = await generateText(text)
-      if ('text' in data) {
-        setResponse(data.text)
-      } else {
-        setError(data.error)
-      }
+      const data = await generateText(text)
+      setResponse(data.text)
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
       console.error('Error submitting text:', err)

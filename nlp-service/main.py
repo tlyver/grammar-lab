@@ -1,11 +1,14 @@
 # nlp-service/main.py
 
 import spacy
-from fastapi import FastAPI, Request
+import os
+from dotenv import load_dotenv
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from schemas.request import ParseRequest
-from schemas.response import Token
-from schemas.response import ParseResponse
+from schemas.response import Token, ParseResponse
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -14,8 +17,8 @@ app.add_middleware(
   CORSMiddleware,
   allow_origins=["http://localhost:3000"],
   allow_credentials=True,
-  allow_methods=["*"],
-  allow_headers=["*"],
+  allow_methods=["POST"],
+  allow_headers=["Content-Type"],
 )
 
 # Load English model
@@ -23,15 +26,11 @@ nlp = spacy.load("en_core_web_sm")
 
 @app.get("/")
 def root():
-  return {"message": "NLP service is running."}
+  return {"status": "ok"}
 
 @app.post("/parse", response_model=ParseResponse)
 async def parse_text(data: ParseRequest):
-  text: str = data.text
-  if not text or not isinstance(text, str):
-    return {"error": "Invalid or missing text"}
-
-  doc = nlp(text)
+  doc = nlp(data.text)
 
   tokens = [
     Token(
@@ -43,7 +42,4 @@ async def parse_text(data: ParseRequest):
     for token in doc
   ]
 
-  return {
-    "text": text,
-    "tokens": tokens,
-  }
+  return {"text": data.text, "tokens": tokens}
