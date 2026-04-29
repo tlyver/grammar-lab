@@ -1,32 +1,58 @@
-# GrammarLab
+# Grammar Lab
 
-**GrammarLab** is an AI-powered sentence diagramming tool designed to help students learn grammar interactively. It uses NLP and LLMs to generate similar sentence structures, explain grammar rules, and visualize syntax trees — all in a secure and scalable web app.
+Grammar Lab is a sentence diagramming tool that parses English text and returns part-of-speech tags, dependency relations, and syntax structure. It is designed as a learning tool for exploring how sentences are grammatically composed.
 
-## 🚀 Features
-- Sentence diagramming with Part of Speech tags and syntax trees
-- AI-generated practice sentences using OpenAI
-- Grammar explanations and tutoring responses
-- Secure, rate-limited API with user-safe design
-- Built with Next.js, React, and TypeScript
+## Architecture
 
-## 🔧 Tech Stack
-- **Frontend:** React (via Next.js), Tailwind CSS
-- **Backend:** Next.js API Routes, OpenAI API
-- **NLP Tools:** spaCy, GPT-4
-- **Security:** Input validation, rate limiting
+The project is split into two services:
 
-## 🛣️ Roadmap
-- [ ] Add sentence input + GPT generation
-- [ ] Visualize parse tree
-- [ ] Add explanation feature
-- [ ] Add user login + personalization
-- [ ] Add adaptive difficulty system
+| Service | Location | Purpose |
+|---|---|---|
+| Next.js app | `/` | UI, input validation, API gateway |
+| NLP service | `/nlp-service` | FastAPI + spaCy text parsing |
 
-## 📸 Screenshots / Demo (coming soon)
+The Next.js API layer sanitises and validates user input before forwarding it to the NLP service, then returns structured token data to the frontend.
 
-## 💡 Inspiration
-Helping students truly understand English syntax — with the power of modern AI and clean UI.
+## Getting started
 
----
+### Prerequisites
 
-**This is a work in progress — contributions and feedback are welcome!**
+- Node.js 18+
+- Python 3.10+
+
+### 1. Start the NLP service
+
+The NLP service must be running before the Next.js app can parse text. See [nlp-service/README.md](./nlp-service/README.md) for full setup instructions.
+
+```bash
+cd nlp-service
+python3 -m venv venv
+source venv/bin/activate      # macOS/Linux
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+uvicorn main:app --reload
+```
+
+Runs on `http://localhost:8000`.
+
+### 2. Start the Next.js app
+
+```bash
+npm install
+npm run dev
+```
+
+Runs on `http://localhost:3000`.
+
+## Tech stack
+
+- **Frontend:** Next.js, React, TypeScript, Tailwind CSS, Zustand
+- **API layer:** Next.js API Routes
+- **NLP backend:** FastAPI, spaCy (`en_core_web_sm`)
+
+## Roadmap
+
+- [ ] Visualise parse tree
+- [ ] Grammar explanation feature
+- [ ] User login and personalisation
+- [ ] Adaptive difficulty
